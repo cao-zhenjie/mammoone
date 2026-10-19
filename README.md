@@ -14,7 +14,7 @@ MammoOne transforms the dense FFNs of a Qwen3-8B backbone into sparse mixture-of
 - `scripts/` — data preparation and split-freezing utilities
 
 ## Status
-Code is being synchronized with the camera-ready revision and will be uploaded here. Review-time access can be granted by the corresponding author upon request.
+Initial release: data processing, training, evaluation, and inference pipeline code (all stage configurations and loss implementations as described in the paper). Model weights are not included; review-time access to further artifacts can be granted by the corresponding author upon request.
 
 ## Data
 The in-house cohort cannot be publicly released due to patient privacy and institutional data-governance requirements. INbreast, CBIS-DDSM, CMMD, and KAU-BCMD are available from their respective distributors.
