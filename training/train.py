@@ -8,7 +8,7 @@
   IV  Deep ensemble (x5 seeds)          Stage-III setting repeated on
                                         top of the shared I-III trunk.
 
-Common recipe (Sec. 4.1): AdamW(betas=(0.9, 0.95), weight_decay=0.1),
+Common recipe (Sec. 4.2): AdamW(betas=(0.9, 0.95), weight_decay=0.1),
 cosine decay with 3% linear warmup, gradient clipping 1.0, bf16 with
 DeepSpeed ZeRO-3, global batch 256, one node of 8x A100-80GB.
 """

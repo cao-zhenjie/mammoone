@@ -1,6 +1,7 @@
 """Clinical-report de-identification of label-leaking fields.
 
-Implements the protocol described in Sec. 3.2 (Clinical Report Encoding):
+Implements the protocol described in Sec. 3.2.2 (Multimodal Input
+Representation, Clinical Report Encoding):
 before tokenization, every report is stripped of all assessment and
 impression fields (BI-RADS category, management recommendation, diagnostic
 conclusion); only descriptive findings are retained. Studies without a

@@ -1,4 +1,4 @@
-"""Mammography image loading and study assembly (Sec. 3.1, 4.1).
+"""Mammography image loading and study assembly (Sec. 3.2.2, 4.1).
 
 Standard four-view protocol (CC_R, MLO_R, CC_L, MLO_L). Each view is
 resized to 512 x 512 pixels and encoded by a frozen DINOv2 ViT-B/14

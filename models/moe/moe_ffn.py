@@ -56,7 +56,7 @@ class MoEFFN(nn.Module):
         return out, aux
 
     def _under_capacity(self, mask, expert_id):
-        # Token dropping during training only (capacity factor 1.25, Sec. 5.4);
+        # Token dropping during training only (capacity factor 1.25, Sec. 3.2);
         # nothing is dropped at inference.
         return mask  # capacity bookkeeping handled by the distributed runner
 

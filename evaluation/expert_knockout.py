@@ -1,5 +1,5 @@
 """Expert-knockout ablation: zero selected experts' gates at inference
-and renormalize the remaining top-k weights (Sec. 4.x)."""
+and renormalize the remaining top-k weights (Sec. 5, ablation)."""
 import torch
 
 

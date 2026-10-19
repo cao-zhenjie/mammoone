@@ -44,3 +44,31 @@ def severity_metrics(y_true, y_pred):
     within1 = float(np.mean(np.abs(np.asarray(y_pred)
                                    - np.asarray(y_true)) <= 1.0))
     return dict(MAE=mae, QWK=qwk, within_one=within1)
+
+
+def delong_test(y_true, score_a, score_b):
+    """DeLong test for the difference of two correlated AUCs (Sec. 4.3).
+    Returns (auc_a, auc_b, two-sided p) with H0: equal AUC."""
+    from scipy.stats import norm
+    y_true = np.asarray(y_true)
+    xa, xb = np.asarray(score_a)[y_true == 1], np.asarray(score_b)[y_true == 1]
+    ya, yb = np.asarray(score_a)[y_true == 0], np.asarray(score_b)[y_true == 0]
+    m, n = len(xa), len(ya)
+
+    def psi(p, q):
+        return (p > q).astype(float) + 0.5 * (p == q)
+
+    def components(x, y):
+        v10 = psi(x[:, None], y[None, :]).mean(axis=1)  # per positive
+        v01 = psi(x[:, None], y[None, :]).mean(axis=0)  # per negative
+        return v10, v01
+
+    va10, va01 = components(xa, ya)
+    vb10, vb01 = components(xb, yb)
+    auc_a, auc_b = va10.mean(), vb10.mean()
+    c10 = np.cov(np.vstack([va10, vb10]))
+    c01 = np.cov(np.vstack([va01, vb01]))
+    var = (c10[0, 0] + c10[1, 1] - 2 * c10[0, 1]) / m \
+        + (c01[0, 0] + c01[1, 1] - 2 * c01[0, 1]) / n
+    z = (auc_a - auc_b) / np.sqrt(max(var, 1e-12))
+    return float(auc_a), float(auc_b), float(2 * norm.sf(abs(z)))
