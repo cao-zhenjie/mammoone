@@ -1,12 +1,17 @@
 stage: 4
-objective: ensemble_member
+objective: deep_ensemble
 members: 5
+note: "repeats the Stage-III setting with five different random seeds
+       on top of the shared Stages I-III trunk"
 lr: 2.0e-5
-steps: 4000
+steps: 10000
 global_batch: 256
 warmup_frac: 0.03
 optimizer: {name: adamw, betas: [0.9, 0.95], weight_decay: 0.1}
 grad_clip: 1.0
 precision: bf16
+losses: "same lambda_i(t) curriculum as Stage III"
+curriculum: {mae: [0.40, 0.15], cls: [0.20, 0.30],
+             sev: [0.25, 0.35], vqa: [0.15, 0.30]}
 vqa_lora: {rank: 64, alpha: 128, dropout: 0.05,
            targets: [q_proj, v_proj, lm_head]}

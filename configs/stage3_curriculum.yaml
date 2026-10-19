@@ -1,6 +1,6 @@
 stage: 3
-objective: joint_curriculum
-lr: 5.0e-5
+objective: synergistic_alignment
+lr: 2.0e-5
 steps: 10000
 global_batch: 256
 warmup_frac: 0.03
@@ -8,6 +8,7 @@ optimizer: {name: adamw, betas: [0.9, 0.95], weight_decay: 0.1}
 grad_clip: 1.0
 precision: bf16
 parallel: {strategy: zero3}
-losses: {classification: 1.0, severity: 1.0, vqa: 1.0,
-         mae: "0.5 * (1 - step/steps)"}
+losses: "lambda_i(t) linear curriculum, renormalized each step"
+curriculum: {mae: [0.40, 0.15], cls: [0.20, 0.30],
+             sev: [0.25, 0.35], vqa: [0.15, 0.30]}
 severity: {lambda_ord: 0.3, margin: 0.1}

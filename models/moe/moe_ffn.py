@@ -60,6 +60,21 @@ class MoEFFN(nn.Module):
         # nothing is dropped at inference.
         return mask  # capacity bookkeeping handled by the distributed runner
 
+    def forward_with_logits(self, logits, x):
+        """Forward with externally supplied router logits (used by
+        expert-knockout ablations, evaluation/expert_knockout.py)."""
+        gates = F.softmax(logits, dim=-1)
+        topv, topi = gates.topk(self.top_k, dim=-1)
+        ghat = topv / topv.sum(dim=-1, keepdim=True)
+        out = torch.zeros_like(x)
+        for k in range(self.top_k):
+            idx, w_ = topi[..., k], ghat[..., k:k+1]
+            for expert in self.experts:
+                mask = idx == self.experts.index(expert)
+                if mask.any():
+                    out[mask] += (w_[mask] * expert(x[mask])).to(out.dtype)
+        return out
+
     @staticmethod
     def load_balancing_loss(logits, gates, topi):
         # L_aux = alpha * N * sum_i f_i * P_i  (Eq. 9)
